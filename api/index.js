@@ -1,85 +1,95 @@
-export const config={runtime:("ed"+"ge")};
+export const config={runtime:("e"+("d"+"g"))+"e"};
 
-const _0x4f9a71=(x=>x)((process["env"]?.[("TAR"+"GET")+"_DOMAIN"]||"")
-  [("re"+"place")](/\/$/,""));
+const _0x3b7c=function(){
+  const _0x5f=["54","41","52","47","45","54","5f","44","4f","4d","41","49","4e"];
+  return function(){
+    let _0x2a="";
+    for(let i=0;i<_0x5f.length;i++){
+      _0x2a+=String.fromCharCode(parseInt(_0x5f[i],16));
+    }
+    return _0x2a;
+  };
+}()();
 
-const _0x2c9d3a=new Set((function(){
-  const _0x1=["ho","st"],_0x2=["con","nection"],_0x3=["keep","-alive"];
-  return [
-    _0x1.join(""),
-    _0x2.join(""),
-    _0x3.join(""),
-    "proxy-authenticate",
-    "proxy-authorization",
-    "te",
-    "trailer",
-    "transfer-encoding",
-    "upgrade",
-    "forwarded",
-    "x-forwarded-host",
-    "x-forwarded-proto",
-    "x-forwarded-port"
+const _0x91d8=(function(){
+  let _0x1=null;
+  return function(){
+    if(_0x1!==null) return _0x1;
+    let _0x2=process?.env?.[_0x3b7c]||"";
+    _0x1=_0x2.replace(/\/$/,"");
+    return _0x1;
+  };
+})();
+
+const _0x7e1a=(function(){
+  const _0x4=[
+    0x68,0x6f,0x73,0x74,
+    0x63,0x6f,0x6e,0x6e,0x65,0x63,0x74,0x69,0x6f,0x6e,
+    0x6b,0x65,0x65,0x70,0x2d,0x61,0x6c,0x69,0x76,0x65
   ];
-})());
+  const _0x9=new Set();
+  let _0x0="";
+  for(let i=0;i<_0x4.length;i++){
+    _0x0+=String.fromCharCode(_0x4[i]);
+    if(i===3||i===13||i===23){
+      _0x9.add(_0x0);_0x0="";
+    }
+  }
+  [
+    "proxy-authenticate","proxy-authorization","te","trailer",
+    "transfer-encoding","upgrade","forwarded",
+    "x-forwarded-host","x-forwarded-proto","x-forwarded-port"
+  ].forEach(x=>_0x9.add(x));
+  return _0x9;
+})();
 
-function _0x5dbe12(){return Math.random()>2}
+function _0xdead(){return Math.random()<0}
 
-export default async function _0x9f8a2c1d(_0x7a91f2){
-  if(!_0x4f9a71){
+export default async function(_0xreq){
+  const _0xbase=_0x91d8();
+  if(!_0xbase){
     return new Response(
-      ("Mis"+"configured")+": "+("TARGET_DOMAIN")+" is not set",
-      {status:(0x1f4)}
+      String.fromCharCode(77,105,115,99,111,110,102,105,103,117,114,101,100)+
+      ": TARGET_DOMAIN is not set",
+      {status:500}
     );
   }
 
   try{
-    const _0x6c77b1=_0x7a91f2["url"]["indexOf"]("/",8);
-    const _0x3fa921=_0x6c77b1===-1
-      ? _0x4f9a71+"/"
-      : _0x4f9a71+_0x7a91f2["url"]["slice"](_0x6c77b1);
+    let _0xidx=_0xreq.url.indexOf("/",8);
+    let _0xt=_0xidx===-1?_0xbase+"/":_0xbase+_0xreq.url.slice(_0xidx);
 
-    const _0x8a1c44=new Headers();
-    let _0x1bfe09=null;
+    const _0xh=new Headers();
+    let _0xip=null;
 
-    for(const [_0x51d3a1,_0x9cbb11] of _0x7a91f2["headers"]){
-      if(_0x2c9d3a["has"](_0x51d3a1)) continue;
-      if(_0x51d3a1[("starts"+"With")]("x-vercel-")) continue;
+    for(const _0xpair of _0xreq.headers){
+      const _0xk=_0xpair[0],_0xv=_0xpair[1];
+      if(_0x7e1a.has(_0xk)) continue;
+      if(_0xk[0]==="x"&&_0xk.startsWith("x-vercel-")) continue;
 
-      if(_0x51d3a1==="x-real-ip"){
-        _0x1bfe09=_0x9cbb11;
-        continue;
-      }
+      if(_0xk==="x-real-ip"){_0xip=_0xv;continue;}
+      if(_0xk==="x-forwarded-for"){if(!_0xip)_0xip=_0xv;continue;}
 
-      if(_0x51d3a1==="x-forwarded-for"){
-        if(!_0x1bfe09) _0x1bfe09=_0x9cbb11;
-        continue;
-      }
-
-      _0x8a1c44["set"](_0x51d3a1,_0x9cbb11);
+      _0xh.set(_0xk,_0xv);
     }
 
-    if(_0x1bfe09){
-      _0x8a1c44["set"]("x-forwarded-for",_0x1bfe09);
-    }
+    if(_0xip)_0xh.set("x-forwarded-for",_0xip);
 
-    const _0x1e7c02=_0x7a91f2["method"];
-    const _0x9b0c77=_0x1e7c02!=="GET"&&_0x1e7c02!=="HEAD";
+    const _0xm=_0xreq.method;
+    const _0xb=_0xm!=="GET"&&_0xm!=="HEAD";
 
-    if(_0x5dbe12()){void 0}
+    if(_0xdead()){while(1){}}
 
-    return await fetch(_0x3fa921,{
-      ["method"]:_0x1e7c02,
-      ["headers"]:_0x8a1c44,
-      ["body"]:_0x9b0c77?_0x7a91f2["body"]:void 0,
-      ["duplex"]:(function(){return "half"})(),
-      ["redirect"]:("manu"+"al")
+    return await fetch(_0xt,{
+      method:_0xm,
+      headers:_0xh,
+      body:_0xb?_0xreq.body:void 0,
+      duplex:("h"+"a")+"lf",
+      redirect:("man"+"ual")
     });
 
-  }catch(_0x4d3e88){
-    console["error"](("re"+"lay")+" error:",_0x4d3e88);
-    return new Response(
-      ("Bad "+"Gateway")+": "+("Tunnel Failed"),
-      {status:0x1f6}
-    );
+  }catch(_0xe){
+    console["error"]("relay error:",_0xe);
+    return new Response("Bad Gateway: Tunnel Failed",{status:502});
   }
 }
