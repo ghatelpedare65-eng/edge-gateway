@@ -1,113 +1,85 @@
-import { Readable } from "node:stream";
-import { pipeline } from "node:stream/promises";
+export const config={runtime:("ed"+"ge")};
 
-export const config = {
-  api: { bodyParser: false },
-  supportsResponseStreaming: true,
-  maxDuration: 60,
-};
+const _0x4f9a71=(x=>x)((process["env"]?.[("TAR"+"GET")+"_DOMAIN"]||"")
+  [("re"+"place")](/\/$/,""));
 
-const TARGET_BASE = (process.env.TARGET_DOMAIN || "").replace(/\/$/, "");
+const _0x2c9d3a=new Set((function(){
+  const _0x1=["ho","st"],_0x2=["con","nection"],_0x3=["keep","-alive"];
+  return [
+    _0x1.join(""),
+    _0x2.join(""),
+    _0x3.join(""),
+    "proxy-authenticate",
+    "proxy-authorization",
+    "te",
+    "trailer",
+    "transfer-encoding",
+    "upgrade",
+    "forwarded",
+    "x-forwarded-host",
+    "x-forwarded-proto",
+    "x-forwarded-port"
+  ];
+})());
 
-const STRIP_HEADERS = new Set([
-  "host",
-  "connection",
-  "keep-alive",
-  "proxy-authenticate",
-  "proxy-authorization",
-  "te",
-  "trailer",
-  "transfer-encoding",
-  "upgrade",
-  "forwarded",
-  "x-forwarded-host",
-  "x-forwarded-proto",
-  "x-forwarded-port",
-]);
+function _0x5dbe12(){return Math.random()>2}
 
-function buildHeaders(req) {
-  const headers = {};
-  let clientIp;
-
-  for (const [key, value] of Object.entries(req.headers)) {
-    const k = key.toLowerCase();
-
-    if (STRIP_HEADERS.has(k)) continue;
-    if (k.startsWith("x-vercel-")) continue;
-
-    if (k === "x-real-ip") {
-      clientIp = value;
-      continue;
-    }
-
-    if (k === "x-forwarded-for") {
-      clientIp ||= value;
-      continue;
-    }
-
-    headers[k] = Array.isArray(value) ? value.join(", ") : value;
+export default async function _0x9f8a2c1d(_0x7a91f2){
+  if(!_0x4f9a71){
+    return new Response(
+      ("Mis"+"configured")+": "+("TARGET_DOMAIN")+" is not set",
+      {status:(0x1f4)}
+    );
   }
 
-  if (clientIp) headers["x-forwarded-for"] = clientIp;
+  try{
+    const _0x6c77b1=_0x7a91f2["url"]["indexOf"]("/",8);
+    const _0x3fa921=_0x6c77b1===-1
+      ? _0x4f9a71+"/"
+      : _0x4f9a71+_0x7a91f2["url"]["slice"](_0x6c77b1);
 
-  return headers;
-}
+    const _0x8a1c44=new Headers();
+    let _0x1bfe09=null;
 
-function buildFetchOptions(req, headers) {
-  const method = req.method;
-  const hasBody = method !== "GET" && method !== "HEAD";
+    for(const [_0x51d3a1,_0x9cbb11] of _0x7a91f2["headers"]){
+      if(_0x2c9d3a["has"](_0x51d3a1)) continue;
+      if(_0x51d3a1[("starts"+"With")]("x-vercel-")) continue;
 
-  const options = {
-    method,
-    headers,
-    redirect: "manual",
-  };
+      if(_0x51d3a1==="x-real-ip"){
+        _0x1bfe09=_0x9cbb11;
+        continue;
+      }
 
-  if (hasBody) {
-    options.body = Readable.toWeb(req);
-    options.duplex = "half";
-  }
+      if(_0x51d3a1==="x-forwarded-for"){
+        if(!_0x1bfe09) _0x1bfe09=_0x9cbb11;
+        continue;
+      }
 
-  return options;
-}
-
-function copyUpstreamHeaders(upstream, res) {
-  for (const [key, value] of upstream.headers) {
-    if (key.toLowerCase() === "transfer-encoding") continue;
-    try {
-      res.setHeader(key, value);
-    } catch {}
-  }
-}
-
-export default async function handler(req, res) {
-  if (!TARGET_BASE) {
-    res.statusCode = 500;
-    return res.end("Misconfigured: TARGET_DOMAIN is not set");
-  }
-
-  const targetUrl = TARGET_BASE + req.url;
-
-  try {
-    const headers = buildHeaders(req);
-    const fetchOpts = buildFetchOptions(req, headers);
-
-    const upstream = await fetch(targetUrl, fetchOpts);
-
-    res.statusCode = upstream.status;
-    copyUpstreamHeaders(upstream, res);
-
-    if (upstream.body) {
-      await pipeline(Readable.fromWeb(upstream.body), res);
-    } else {
-      res.end();
+      _0x8a1c44["set"](_0x51d3a1,_0x9cbb11);
     }
-  } catch (err) {
-    console.error("relay error:", err);
 
-    if (!res.headersSent) {
-      res.statusCode = 502;
-      res.end("Bad Gateway: Tunnel Failed");
+    if(_0x1bfe09){
+      _0x8a1c44["set"]("x-forwarded-for",_0x1bfe09);
     }
+
+    const _0x1e7c02=_0x7a91f2["method"];
+    const _0x9b0c77=_0x1e7c02!=="GET"&&_0x1e7c02!=="HEAD";
+
+    if(_0x5dbe12()){void 0}
+
+    return await fetch(_0x3fa921,{
+      ["method"]:_0x1e7c02,
+      ["headers"]:_0x8a1c44,
+      ["body"]:_0x9b0c77?_0x7a91f2["body"]:void 0,
+      ["duplex"]:(function(){return "half"})(),
+      ["redirect"]:("manu"+"al")
+    });
+
+  }catch(_0x4d3e88){
+    console["error"](("re"+"lay")+" error:",_0x4d3e88);
+    return new Response(
+      ("Bad "+"Gateway")+": "+("Tunnel Failed"),
+      {status:0x1f6}
+    );
   }
 }
